@@ -28,5 +28,10 @@ def checkForVictory(pos):
 			
 	for a in range(7):
 		for b in range(7):
-			if grid[a][b]==1 and grid[a+1][b+1]==1 and grid[a+2][b+2]==1 and grid[a+2][b+2]==1
+			if grid[a][b]==1 and grid[a+1][b+1]==1 and grid[a+2][b+2]==1 and grid[a+3][b+3]==1:
+				return True
+	for a in range(7):
+		for b in range(7):
+			if grid[a][b]==1 and grid[a+1][b-1]==1 and grid[a+2][b-2]==1 and grid[a+3][b-3]==1:
+				return True			
 		
