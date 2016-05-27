@@ -24,8 +24,6 @@ for i in range (0, gridnum+3):
     for j in range (0, gridnum+3):
         row.append(0)
     grid.append(row)
-print(grid)
-print(len(grid[0]))
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Connect 4")
 surface = pygame.display.get_surface()
