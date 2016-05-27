@@ -17,28 +17,33 @@ red = pygame.color.Color("red")
 black = pygame.color.Color("black")
 highlightedcol = -1
 turn = 0
-grid = []
-row=[]
-for i in range (0, gridnum+3):
-    row=[]
-    for j in range (0, gridnum+3):
-        row.append(0)
-    grid.append(row)
+
+
+
+print(len(grid[0]))
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Connect 4")
 surface = pygame.display.get_surface()
 
-def getgrid(x, y):
-    if x < 0 or x >= gridnum or y < 0 or y >= gridnum:
-        return -1
-    global grid
-	
-    return grid[x][y]
-    
-    
-def setgrid((x, y), val):
-    global grid
-    grid[x][y] = val
+class Grid:
+	def __init__(self)
+		self.grid=[]
+		for i in range (0, gridnum+3):
+			row=[]
+			for j in range (0, gridnum+3):
+				row.append(0)
+			self.grid.append(row)
+	def getgrid(self, x, y):
+		if x < 0 or x >= gridnum or y < 0 or y >= gridnum:
+			return -1
+		
+		
+		return self.grid[x][y]
+		
+		
+	def setgrid(self, (x, y), val):
+		
+		self.grid[x][y] = val
 
 # Returns the currently highlighted column number
 def highlight((x, y)):
