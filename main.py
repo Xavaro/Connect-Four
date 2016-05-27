@@ -58,7 +58,7 @@ def select(pos, turn):
         while True:
             if getgrid(xval, yval)==0:
                 setgrid((xval, yval), turn)
-                print("Grid is", grid)
+                
                 return checkForVictory(grid)
             elif yval < 0:
                 return False
