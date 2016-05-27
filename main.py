@@ -120,10 +120,9 @@ def input(events):
             global victory
             victory = select(event.pos, (turn % 2) + 1)
             turn = turn + 1
-            
             if victory:
-            	sys.exit(0) #EDIT FOR EXIT SCREEN
-            	print("GG")
+                print("GG")
+                #sys.exit(0) #EDIT FOR EXIT SCREEN
         #else:
         #    print event
 
@@ -142,4 +141,5 @@ while True:
             elif getgrid(x,y) == 2:
                 pygame.draw.ellipse(surface, black, (cellwidth*x, cellheight*y, cellwidth, cellheight), 0)
     pygame.display.flip()
-    input(pygame.event.get())
+    if not victory:
+        input(pygame.event.get())
