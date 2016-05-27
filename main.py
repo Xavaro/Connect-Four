@@ -8,6 +8,7 @@ height = user32.GetSystemMetrics(1)-75
 gridnum = 7
 cellwidth = (width-200)/gridnum
 cellheight = height/gridnum
+width_adapted = width-200
 victory = 0
 linecolour = pygame.color.Color("green")
 bgcolour = pygame.color.Color("blue")
@@ -43,16 +44,16 @@ def setgrid((x, y), val):
 
 # Returns the currently highlighted column number
 def highlight((x, y)):
-    if x < width and x > 0 and y < height and y > 0:
-        return int(gridnum * x/width)
+    if x < width_adapted and x > 0 and y < height and y > 0:
+        return int(gridnum * x/width_adapted)
     else:
-        return False
+        return -1
 
 # Upon clicking a column, place a piece at the lowest available spot.
 # Returns victory status, or -1 otherwise.
 def select(pos, turn):
-    if pos[0] < width and pos[0] > 0 and pos[1] < height and pos[1] > 0:
-        xval = int(pos[0]/float(width)*gridnum)
+    if pos[0] < width_adapted and pos[0] > 0 and pos[1] < height and pos[1] > 0:
+        xval = int(pos[0]/float(width_adapted)*gridnum)
         yval = gridnum - 1
         while True:
             if getgrid(xval, yval)==0:
@@ -131,8 +132,8 @@ while True:
     if highlightedcol > -1:
         pygame.draw.rect(surface, highlightcolour, (cellwidth*highlightedcol, 0, cellwidth, height), 0)
     for i in range(1, gridnum):
-        pygame.draw.line(surface, linecolour, (0, cellheight*i), (width, cellheight*i))
-    for i in range(1, gridnum):
+        pygame.draw.line(surface, linecolour, (0, cellheight*i), (width_adapted, cellheight*i))
+    for i in range(1, gridnum+1):
         pygame.draw.line(surface, linecolour, (cellwidth*i, 0), (cellwidth*i, height))
     for x in range (0, gridnum):
         for y in range (0, gridnum):
