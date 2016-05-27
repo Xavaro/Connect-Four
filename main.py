@@ -1,10 +1,12 @@
 import pygame, sys, os
+import ctypes
 from pygame.locals import *
 pygame.init()
-width = 640
-height = 480
+user32 = ctypes.windll.user32
+width = user32.GetSystemMetrics(0)
+height = user32.GetSystemMetrics(1)-75
 gridnum = 7
-cellwidth = width/gridnum
+cellwidth = (width-200)/gridnum
 cellheight = height/gridnum
 victory = 0
 linecolour = pygame.color.Color("green")
@@ -15,10 +17,14 @@ black = pygame.color.Color("black")
 highlightedcol = -1
 turn = 0
 grid = []
-for i in range (0, gridnum):
-    for j in range (0, gridnum):
-        grid.append(0)
-
+row=[]
+for i in range (0, gridnum+3):
+    row=[]
+    for j in range (0, gridnum+3):
+        row.append(0)
+    grid.append(row)
+print(grid)
+print(len(grid[0]))
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Connect 4")
 surface = pygame.display.get_surface()
@@ -27,97 +33,79 @@ def getgrid(x, y):
     if x < 0 or x >= gridnum or y < 0 or y >= gridnum:
         return -1
     global grid
-    return grid[y*gridnum + x]
+	
+    return grid[x][y]
+    
     
 def setgrid((x, y), val):
     global grid
-    grid[y*gridnum + x] = val
+    grid[x][y] = val
 
 # Returns the currently highlighted column number
 def highlight((x, y)):
     if x < width and x > 0 and y < height and y > 0:
         return int(gridnum * x/width)
     else:
-        return -1
+        return False
 
 # Upon clicking a column, place a piece at the lowest available spot.
 # Returns victory status, or -1 otherwise.
-def select((x, y), turn):
-    if x < width and x > 0 and y < height and y > 0:
-        col = int(x/float(width)*gridnum)
-        i = gridnum - 1
+def select(pos, turn):
+    if pos[0] < width and pos[0] > 0 and pos[1] < height and pos[1] > 0:
+        xval = int(pos[0]/float(width)*gridnum)
+        yval = gridnum - 1
         while True:
-            if getgrid(col, i) == 0:
-                setgrid((col, i), turn)
-                return checkvictory(col, i, turn)
-            elif i < 0:
-                return -1
+            if getgrid(xval, yval)==0:
+                setgrid((xval, yval), turn)
+                print("Grid is", grid)
+                return checkForVictory(grid)
+            elif yval < 0:
+                return False
             else:
-                i = i - 1
+                yval = yval - 1
     else:
-        return -1
+        return False
 
 # Awkward manual checking of victory conditions. Definitely room for
 # optomization here, or at least simplification.
-def checkvictory(x, y, turn):
-    xdir = 1
-    if getgrid(x+1, y) == turn:
-        xdir = xdir + 1
-        if getgrid(x+2, y) == turn:
-            xdir = xdir + 1
-            if getgrid(x+3, y) == turn:
-                xdir = xdir + 1
-    if getgrid(x-1, y) == turn:
-        xdir = xdir + 1
-        if getgrid(x-2, y) == turn:
-            xdir = xdir + 1
-            if getgrid(x-3, y) == turn:
-                xdir = xdir + 1
-    ydir = 1
-    if getgrid(x, y+1) == turn:
-        ydir = ydir + 1
-        if getgrid(x, y+2) == turn:
-            ydir = ydir + 1
-            if getgrid(x, y+3) == turn:
-                ydir = ydir + 1
-    if getgrid(x, y-1) == turn:
-        ydir = ydir + 1
-        if getgrid(x, y-2) == turn:
-            ydir = ydir + 1
-            if getgrid(x, y-3) == turn:
-                ydir = ydir + 1
-    diag = 1
-    if getgrid(x-1, y-1) == turn:
-        diag = diag + 1
-        if getgrid(x-2, y-2) == turn:
-            diag = diag + 1
-            if getgrid(x-3, y-3) == turn:
-                diag = diag + 1
-    if getgrid(x+1, y+1) == turn:
-        diag = diag + 1
-        if getgrid(x+2, y+2) == turn:
-            diag = diag + 1
-            if getgrid(x+3, y+3) == turn:
-                diag = diag + 1
-    diag2 = 1
-    if getgrid(x-1, y+1) == turn:
-        diag2 = diag2 + 1
-        if getgrid(x-2, y+2) == turn:
-            diag2 = diag2 + 1
-            if getgrid(x-3, y+3) == turn:
-                diag2 = diag2 + 1
-    if getgrid(x-1, y+1) == turn:
-        diag2 = diag2 + 1
-        if getgrid(x-2, y+2) == turn:
-            diag2 = diag2 + 1
-            if getgrid(x-3, y+3) == turn:
-                diag2 = diag2 + 1
-    if xdir > 3 or ydir > 3 or diag > 3 or diag2 > 3:
-        print "Victory, for player %d!" % (turn % 2 + 1)
-        return 1
-    else:
-        return 0
-
+def checkForVictory(grid):
+    numinarowp1=0
+    numinarowp2=0
+    numinarowp3=0
+    numinarowp4=0
+    
+    for b in range(7):
+        for a in range(7): #check vertical and horizontal for win
+            if grid[b][a]==1: #checks each collumbs for p1 piece
+                numinarowp1+=1
+            else:
+                numinarowp1=0
+            if grid[b][a]==2: #checks for p2 piece
+                numinarowp2+=1
+            else:
+                numinarowp2=0
+            if numinarowp1>=4 or numinarowp2>=4:
+                return True
+            if grid[a][b]==1: #checks each row for p1 piece
+                numinarowp3+=1
+            else:
+                numinarowp3=0
+            if grid[a][b]==2: #checks for p2 piece
+                numinarowp4+=1
+            else:
+                numinarowp4=0
+            if numinarowp3>=4 or numinarowp4>=4:
+                return True	
+			
+    for a in range(7):
+        for b in range(7):
+            if grid[a][b]==1 and grid[a+1][b+1]==1 and grid[a+2][b+2]==1 and grid[a+3][b+3]==1:
+                return True
+    for a in range(7):
+        for b in range(7):
+            if grid[a][b]==1 and grid[a+1][b-1]==1 and grid[a+2][b-2]==1 and grid[a+3][b-3]==1:
+                return True
+    return False
 def input(events):
     # Every tick events are added to the events list. 
     for event in events:
@@ -131,6 +119,7 @@ def input(events):
             global victory
             victory = select(event.pos, (turn % 2) + 1)
             turn = turn + 1
+            print("NNNOOOOOOO")
         #else:
         #    print event
 
