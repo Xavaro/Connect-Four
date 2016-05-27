@@ -119,7 +119,10 @@ def input(events):
             global victory
             victory = select(event.pos, (turn % 2) + 1)
             turn = turn + 1
-            print("NNNOOOOOOO")
+            
+            if victory:
+            	sys.exit(0) #EDIT FOR EXIT SCREEN
+            	print("GG")
         #else:
         #    print event
 
