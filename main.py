@@ -18,15 +18,13 @@ black = pygame.color.Color("black")
 highlightedcol = -1
 turn = 0
 
-grid=Grid()
-print(grid)
 
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Connect 4")
 surface = pygame.display.get_surface()
 
 class Grid:
-	def __init__(self)
+	def __init__(self):
 		self.grid=[]
 		for i in range (0, gridnum+3):
 			row=[]
@@ -44,8 +42,7 @@ class Grid:
 	def setgrid(self, (x, y), val):
 		
 		self.grid[x][y] = val
-	def __str__(self):
-		return self.grid
+	
 # Returns the currently highlighted column number
 def highlight((x, y)):
     if x < width_adapted and x > 0 and y < height and y > 0:
@@ -81,21 +78,21 @@ def checkForVictory(grid):
     
     for b in range(7):
         for a in range(7): #check vertical and horizontal for win
-            if grid[b][a]==1: #checks each collumbs for p1 piece
+            if grid.getgrid(b,a)==1: #checks each collumbs for p1 piece
                 numinarowp1+=1
             else:
                 numinarowp1=0
-            if grid[b][a]==2: #checks for p2 piece
+            if grid.getgrid(b,a)==2: #checks for p2 piece
                 numinarowp2+=1
             else:
                 numinarowp2=0
             if numinarowp1>=4 or numinarowp2>=4:
                 return True
-            if grid[a][b]==1: #checks each row for p1 piece
+            if grid.getgrid(a,b)==1: #checks each row for p1 piece
                 numinarowp3+=1
             else:
                 numinarowp3=0
-            if grid[a][b]==2: #checks for p2 piece
+            if grid.getgrid(a,b)==2: #checks for p2 piece
                 numinarowp4+=1
             else:
                 numinarowp4=0
@@ -104,11 +101,11 @@ def checkForVictory(grid):
 			
     for a in range(7):
         for b in range(7):
-            if grid[a][b]==1 and grid[a+1][b+1]==1 and grid[a+2][b+2]==1 and grid[a+3][b+3]==1:
+            if grid.getgrid(a,b)==1 and grid.getgrid(a+1,b+1)==1 and grid.getgrid(a+2,b+2)==1 and grid.getgrid(a+3,b+3)==1:
                 return True
     for a in range(7):
         for b in range(7):
-            if grid[a][b]==1 and grid[a+1][b-1]==1 and grid[a+2][b-2]==1 and grid[a+3][b-3]==1:
+            if grid.getgrid(a,b)==1 and grid.getgrid(a+1,b-1)==1 and grid.getgrid(a+2,b-2)==1 and grid.getgrid(a+3,b-3)==1:
                 return True
     return False
 def input(events):
@@ -129,6 +126,8 @@ def input(events):
                 #sys.exit(0) #EDIT FOR EXIT SCREEN
         #else:
         #    print event
+grid=Grid()
+print(grid)
 
 while True:
     pygame.draw.rect(surface, bgcolour, (0, 0, width, height), 0)
@@ -140,9 +139,9 @@ while True:
         pygame.draw.line(surface, linecolour, (cellwidth*i, 0), (cellwidth*i, height))
     for x in range (0, gridnum):
         for y in range (0, gridnum):
-            if getgrid(x,y) == 1:
+            if grid.getgrid(x,y) == 1:
                 pygame.draw.ellipse(surface, red, (cellwidth*x, cellheight*y, cellwidth, cellheight), 0)
-            elif getgrid(x,y) == 2:
+            elif grid.getgrid(x,y) == 2:
                 pygame.draw.ellipse(surface, black, (cellwidth*x, cellheight*y, cellwidth, cellheight), 0)
     pygame.display.flip()
     if not victory:
