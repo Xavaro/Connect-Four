@@ -1,0 +1,4 @@
+if startScreen<2:
+	startScreen+=1
+	background.fill('white')
+	pygame.dra
