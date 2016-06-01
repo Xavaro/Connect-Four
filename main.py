@@ -18,9 +18,9 @@ black = pygame.color.Color("black")
 highlightedcol = -1
 turn = 0
 
+grid=Grid()
+print(grid)
 
-
-print(len(grid[0]))
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Connect 4")
 surface = pygame.display.get_surface()
@@ -44,7 +44,8 @@ class Grid:
 	def setgrid(self, (x, y), val):
 		
 		self.grid[x][y] = val
-
+	def __str__(self):
+		return self.grid
 # Returns the currently highlighted column number
 def highlight((x, y)):
     if x < width_adapted and x > 0 and y < height and y > 0:
@@ -59,8 +60,8 @@ def select(pos, turn):
         xval = int(pos[0]/float(width_adapted)*gridnum)
         yval = gridnum - 1
         while True:
-            if getgrid(xval, yval)==0:
-                setgrid((xval, yval), turn)
+            if grid.getgrid(xval, yval)==0:
+                grid.setgrid((xval, yval), turn)
                 
                 return checkForVictory(grid)
             elif yval < 0:
