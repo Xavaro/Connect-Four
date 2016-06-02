@@ -1,4 +1,19 @@
-if startScreen<2:
-	startScreen+=1
+username=''
+
+if startScreen<=2:
+	
 	background.fill('white')
-	pygame.dra
+	if event.type == pygame.KEYup:
+		if event.key == k_RETURN:
+			startScreen+=1
+			if len(username)==0:
+				user='Temp player, player ' +str(startScreen)
+				continue
+			else:
+				user=username
+				continue
+		if event.key=k_BACKSPACE:
+			username=username[0:len(username)-1]
+		if event.key in [k_a,k_b,k_c,k_d,k_e,k_f,k_g,k_h,k_i,k_j,k_k,k_l,k_m,k_n,k_o,k_p,k_q,k_r,k_s,k_t,k_u,k_v,k_w,k_x,k_y,k_z]:
+			username+=str(pygame.key.name(event.key))
+	render(username, True, 'blue', background=None)
