@@ -17,7 +17,7 @@ red = pygame.color.Color("red")
 black = pygame.color.Color("black")
 highlightedcol = -1
 turn = 0
-
+startScreen = 1
 
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Connect 4")
