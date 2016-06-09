@@ -1,0 +1,68 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import pygame
+
+from textbox import TextBox
+
+playercounter = 1
+KEY_REPEAT_SETTING = (200, 70)
+
+
+class Control(object):
+
+    def __init__(self):
+        pygame.init()
+        pygame.display.set_caption('Input Box')
+        self.screen = pygame.display.set_mode((500, 500))
+        self.clock = pygame.time.Clock()
+        self.fps = 60.0
+        self.done = False
+        self.input = TextBox((100, 100, 150, 30),
+                             command=self.set_name,
+                             clear_on_enter=True,
+                             inactive_on_enter=False)
+        self.name = ''
+        self.prompt = self.make_prompt()
+        pygame.key.set_repeat(*KEY_REPEAT_SETTING)
+
+    def make_prompt(self):
+        font = pygame.font.SysFont('arial', 20)
+        message = 'Please username for player ' + str(playercounter)
+        rend = font.render(message, True, pygame.Color('white'))
+        return (rend, rend.get_rect(topleft=(10, 35)))
+
+    def event_loop(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.done = True
+            self.input.get_event(event)
+
+    def set_name(self, id, name):
+        try:
+            self.name = str(name)
+        except ValueError:
+            print 'Please input a valid username.'
+
+    def main_loop(self):
+        while not self.done:
+            self.event_loop()
+            self.input.update()
+            self.screen.fill(pygame.Color('black'))
+            self.input.draw(self.screen)
+            self.screen.blit(*self.prompt)
+            pygame.display.update()
+            self.clock.tick(self.fps)
+            print self.name
+
+
+if __name__ == '__main__':
+    app = Control()
+    app.main_loop()
+    pygame.quit()
+    sys.exit()
+
+
+			
