@@ -283,8 +283,10 @@ def input(events):
                g+=1 
             print'change'
             if victory:
+                print user[turn%2] + " won!"
                 print 'Applicaiton exited sucessfully'
                 pygame.quit()
+                sys.exit(0)
 
 
                 # sys.exit(0) #EDIT FOR EXIT SCREEN
